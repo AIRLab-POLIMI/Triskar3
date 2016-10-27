@@ -14,6 +14,7 @@ add_message_files(
    FILES
    IR.msg
    Pixy.msg
+   PixyServo.msg
 )
 
 ## Generate services in the 'srv' folder
