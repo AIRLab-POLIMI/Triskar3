@@ -7,7 +7,7 @@
 
 	<!-- triskar teleop node-->
 	<rosparam file="$(find triskar)/params/teleop.yaml" command="load" />
-	<node pkg="r2p" type="teleop_joy.py" name="triskar_teleop">
+	<node pkg="teleop_twist_joy" type="teleop_twist_joy" name="triskar_teleop">
 	
 	</node>
 

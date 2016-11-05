@@ -1,0 +1,6 @@
+<launch>
+	<!-- triskar teleop node-->
+	<!-- rosparam file="$(find triskar)/params/teleop.yaml" command="load" / -->
+	<node pkg="teleop_twist_keyboard" type="teleop_twist_keyboard.py" name="triskar_teleop" />
+
+</launch> 
