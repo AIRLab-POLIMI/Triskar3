@@ -1,0 +1,4 @@
+#Udev rules needed by the triskar
+KERNEL=="ttyACM0",MODE="0666"
+KERNEL=="js0",MODE:="0666"
+
