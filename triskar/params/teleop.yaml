@@ -1,4 +1,17 @@
-topic: /cmd_vel
-setpoint_scale: {x: 1.0, y: 1.0, w: 3.14}
-gear_scale: [{x: 0.25, y: 0.25, w: 0.25}, {x: 0.5, y: 0.5, w: 0.5}, {x: 0.75, y: 0.75, w: 0.75}, {x: 1, y: 1, w: 1}]
-
+axis_linear:
+  x: 1
+  y: 0
+scale_linear:
+  x: 0.5
+  y: 0.5
+axis_angular:
+  yaw: 2
+scale_angular:
+  yaw: 4.0
+enable_button: 5
+enable_turbo_button: 7
+scale_linear_turbo:
+  x: 1.0
+  y: 1.0
+scale_angular_turbo:
+  yaw: 6.28
