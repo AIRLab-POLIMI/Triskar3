@@ -1,16 +1,19 @@
 <launch>
         <!-- joy node -->
         <node respawn="true" pkg="joy" type="joy_node" name="joy_node">
-                <param name="dev" type="string" value="/dev/input/js0" />
-                <param name="deadzone" value="0.1" />
-		<param name="autorepeat_rate" value="10.0" />
+            <param name="dev" type="string" value="/dev/input/js0" />
+            <param name="deadzone" value="0.1" />
+			<param name="autorepeat_rate" value="10.0" />
         </node>
 
         <!-- triskar teleop node-->
         <rosparam file="$(find triskar)/params/teleop.yaml" command="load" ns="triskar_teleop"/>
-	
         <node pkg="teleop_twist_joy" type="teleop_node" name="triskar_teleop" />
+        
+        <!-- triskar pixy teleop node-->
+        <rosparam file="$(find triskar)/params/pixy.yaml" command="load" ns="triskar_pixy"/>
+        <node pkg="triskar" type="teleop_pixy_joy" name="triskar_pixy" />
 
-	<!-- rosserial launch file for nova core  -->
-	<include file="$(find rosserial_core)/launch/serial_node.launch" />
+		<!-- rosserial launch file for nova core  -->
+		<include file="$(find rosserial_core)/launch/serial_node.launch" />
 </launch> 
