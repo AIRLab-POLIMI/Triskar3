@@ -7,16 +7,20 @@ find_package(catkin REQUIRED COMPONENTS roscpp
 
 catkin_package()
 
-include_directories(${catkin_INCLUDE_DIRS})
+include_directories(include ${catkin_INCLUDE_DIRS})
 
 
 ###########
 ## Build ##
 ###########
 
-add_executable(teleop_pixy_joy src/PixyTeleop.cpp)
+add_library(triskar src/PixyPublisher)
 
-target_link_libraries(teleop_pixy_joy ${catkin_LIBRARIES})
+add_executable(teleop_pixy_joy src/PixyTeleop.cpp)
+add_executable(pixy_demo src/PixyDemo.cpp)
+
+target_link_libraries(teleop_pixy_joy triskar ${catkin_LIBRARIES})
+target_link_libraries(pixy_demo triskar ${catkin_LIBRARIES})
 
 #############
 ## Install ##
