@@ -49,6 +49,8 @@ public:
 		nh.param("tiltKp", tiltController.Kp, 500);
 		nh.param("tiltKd", tiltController.Kd, 400);
 
+		nh.param("signatureId", signatureId, 1);
+
 		centerX = (maxX - minX)/2;
 		centerY = (maxY - minY)/2;
 
@@ -60,11 +62,14 @@ public:
 
 	void joyCallback(const triskar_msgs::Pixy::ConstPtr& pixy_msg)
 	{
-		updateError(centerX - pixy_msg->x, panController, pan);
-		updateError(pixy_msg->y - centerY, tiltController, tilt);
+		if(pixy_msg->signature == signatureId)
+		{
+			update(centerX - pixy_msg->x, panController, pan);
+			update(pixy_msg->y - centerY, tiltController, tilt);
+		}
 	}
 
-	void updateError(int error, controllerState& state, double& axis)
+	void update(int error, controllerState& state, double& axis)
 	{
 		int error_delta = error - state.error;
 
@@ -85,6 +90,8 @@ private:
 	controllerState tiltController;
 
 	int centerX, centerY;
+
+	int signatureId;
 };
 
 
@@ -102,8 +109,6 @@ int main(int argc, char *  argv[])
 
     return 0;
 }
-
-// LEIMON 2015 //
 
 
 
