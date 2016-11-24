@@ -18,14 +18,16 @@ add_library(triskar src/PixyPublisher)
 
 add_executable(teleop_pixy_joy src/PixyTeleop.cpp)
 add_executable(pixy_demo src/PixyDemo.cpp)
+add_executable(random_exploration src/RandomExploration.cpp)
 
 target_link_libraries(teleop_pixy_joy triskar ${catkin_LIBRARIES})
 target_link_libraries(pixy_demo triskar ${catkin_LIBRARIES})
+target_link_libraries(random_exploration ${catkin_LIBRARIES})
 
 #############
 ## Install ##
 #############
-
+ 
 install(TARGETS teleop_pixy_joy
         ARCHIVE DESTINATION ${CATKIN_PACKAGE_LIB_DESTINATION}
         LIBRARY DESTINATION ${CATKIN_PACKAGE_LIB_DESTINATION}
