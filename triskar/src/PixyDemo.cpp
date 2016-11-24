@@ -58,9 +58,11 @@ public:
 		panController.min = minPan;
 		tiltController.max = maxTilt;
 		tiltController.min = minTilt;
+
+		pixy_sub = nh.subscribe<triskar_msgs::Pixy>("/pixy", 5, &PixyTracker::pixyCallback, this);
 	}
 
-	void joyCallback(const triskar_msgs::Pixy::ConstPtr& pixy_msg)
+	void pixyCallback(const triskar_msgs::Pixy::ConstPtr& pixy_msg)
 	{
 		if(pixy_msg->signature == signatureId)
 		{
@@ -71,13 +73,13 @@ public:
 
 	void update(int error, controllerState& state, double& axis)
 	{
-		int error_delta = error - state.error;
+		int error_delta = state.error - error;
 
-		int velocity = (state.Kp*error + state.Kd*error_delta) >> 10;
+		int velocity = static_cast<int>(state.Kp*error + state.Kd*error_delta) >> 10;
 
 	    int position = axis + velocity;
 
-		axis = bound(position, state.max, state.min);
+		axis = bound(position, state.min, state.max);
 
 		state.error = error;
 	}

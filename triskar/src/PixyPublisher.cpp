@@ -29,13 +29,13 @@ PixyPublisher::PixyPublisher(ros::NodeHandle& nh)
 	: nh(nh), rate(0)
 {
 	double freq;
-	nh.param("rate", freq, 1.0);
+	nh.param("rate", freq, 50.0);
 	rate = ros::Rate(freq);
 
 	nh.param("minPan", minPan, 0);
 	nh.param("minTilt", minTilt, 0);
-	nh.param("maxPan", maxPan, 2000);
-	nh.param("maxTilt", maxTilt, 2000);
+	nh.param("maxPan", maxPan, 1000);
+	nh.param("maxTilt", maxTilt, 1000);
 
 	nh.param("minX", minX, 0);
 	nh.param("minY", minY, 0);
