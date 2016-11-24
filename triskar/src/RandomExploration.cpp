@@ -124,9 +124,9 @@ public:
 		cmd_msg.linear.x = 0.5;
 
 		if(!obstacleLeft)
-			cmd_msg.angular.z = 4.0;
-		else if(!obstacleRight)
 			cmd_msg.angular.z = -4.0;
+		else if(!obstacleRight)
+			cmd_msg.angular.z = 4.0;
 		else
 			cmd_msg.angular.z = 0;
 	}
@@ -168,6 +168,8 @@ public:
 				}
 				break;
 		}
+
+		time = stamp;
 	}
 
 private:
