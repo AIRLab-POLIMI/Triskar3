@@ -135,14 +135,18 @@ public:
 	{
 		double durationForward = 5.0;
 		double durationTurn = 1.0;
+		double durationObstacle = 2.0;
 		ros::Time stamp = ros::Time::now();
+		ros::Duration delta = stamp - time;
 
 		switch (state)
 		{
 			case Obstacle:
-				if(!obstacleFront && (obstacleRight || obstacleLeft))
+				if(!obstacleFront && (obstacleRight || obstacleLeft ||
+						delta > ros::Duration(durationObstacle)))
 				{
 					state = Forward;
+					time = stamp;
 				}
 				break;
 
@@ -150,10 +154,12 @@ public:
 				if(obstacleFront)
 				{
 					state = Obstacle;
+					time = stamp;
 				}
-				else if(stamp - time > ros::Duration(durationForward))
+				else if(delta > ros::Duration(durationForward))
 				{
 					state = Turn;
+					time = stamp;
 				}
 				break;
 
@@ -161,15 +167,15 @@ public:
 				if(obstacleFront)
 				{
 					state = Obstacle;
+					time = stamp;
 				}
-				else if(stamp - time > ros::Duration(durationForward))
+				else if(stamp - time > ros::Duration(durationTurn))
 				{
 					state = Forward;
+					time = stamp;
 				}
 				break;
 		}
-
-		time = stamp;
 	}
 
 private:
