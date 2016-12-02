@@ -5,7 +5,7 @@ import RPi.GPIO as GPIO
 import os.path
 from std_msgs.msg import String
 from sensor_msgs.msg import Joy
-from record_ros.srv import String_cmd
+#from record_ros.srv import String_cmd
 
 ON = 11
 SERIAL_UP = 13
@@ -13,13 +13,11 @@ RECORDING = 15
 
 isRecording = False
 
-pub = rospy.Publisher('', String)
-
 def joyCallback(data):
 	if data.buttons[9] == 1:
 		rospy.wait_for_service('/recorder/cmd')
 		try:
-			service = rospy.ServiceProxy('/recorder/cmd', String_cmd)
+#			service = rospy.ServiceProxy('/recorder/cmd', String_cmd)
 			if not isRecording:
 				service('record')
 				isRecording = True
@@ -55,11 +53,12 @@ def statusNode():
 	serialDevice = '/dev/ttyACM0'
 	
 	while not rospy.is_shutdown():
-		if os.path.isfile(serialDevice):
+		if os.path.exists(serialDevice):
 			GPIO.output(SERIAL_UP, True)
 		else:
 			GPIO.output(SERIAL_UP, False)
 		rate.sleep()
+			
 
 if __name__ == '__main__':
 	try:
@@ -67,3 +66,7 @@ if __name__ == '__main__':
 		        
 	except rospy.ROSInterruptException:
 		pass
+	GPIO.output(ON, False)
+	GPIO.output(SERIAL_UP, False)
+        GPIO.output(RECORDING, False)
+	GPIO.cleanup()
