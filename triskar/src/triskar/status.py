@@ -36,7 +36,7 @@ def joyCallback(data):
 			isRecording = False
 			GPIO.output(RECORDING, False)
 		isPressed = True
-	else if data.buttons[9] == 0
+	elif data.buttons[9] == 0:
 		isPressed = False
 
 
