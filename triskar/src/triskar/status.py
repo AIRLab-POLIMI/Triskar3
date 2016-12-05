@@ -5,27 +5,34 @@ import RPi.GPIO as GPIO
 import os.path
 from std_msgs.msg import String
 from sensor_msgs.msg import Joy
-#from record_ros.srv import String_cmd
+from record_ros.srv import String_cmd
 
 ON = 11
 SERIAL_UP = 13
 RECORDING = 15
 
 isRecording = False
+isPressed = False
 
 def joyCallback(data):
+	global isRecording
+	global isPressed
 	if data.buttons[9] == 1:
-		rospy.wait_for_service('/recorder/cmd')
+		print 'start button pressed'
+		rospy.wait_for_service('/record/cmd')
 		try:
-#			service = rospy.ServiceProxy('/recorder/cmd', String_cmd)
+			print 'sending request'
+			service = rospy.ServiceProxy('/record/cmd', String_cmd)
 			if not isRecording:
+				print'record'
 				service('record')
 				isRecording = True
 				GPIO.output(RECORDING, True)
 			else:
+				print 'stop'
 				service('stop')
 			
-		except rospyServiceException, e:
+		except rospy.ServiceException, e:
 			isRecording = False
 			GPIO.output(RECORDING, False)
 
