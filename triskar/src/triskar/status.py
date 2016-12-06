@@ -17,7 +17,8 @@ isPressed = False
 def joyCallback(data):
 	global isRecording
 	global isPressed
-	if data.buttons[9] == 1 and not isPressed:
+	global startButton
+	if data.buttons[startButton] == 1 and not isPressed:
 		print 'start button pressed'
 		rospy.wait_for_service('/record/cmd')
 		try:
@@ -36,16 +37,20 @@ def joyCallback(data):
 			isRecording = False
 			GPIO.output(RECORDING, False)
 		isPressed = True
-	elif data.buttons[9] == 0:
+	elif data.buttons[startButton] == 0:
 		isPressed = False
 
 
 def statusNode():
+	global startButton
 	#Init node
 	rospy.init_node('status', anonymous=True)
 	
 	#Setup subscriber 
-	rospy.Subscriber('/joy', Joy, joyCallback);
+	rospy.Subscriber('/joy', Joy, joyCallback)
+
+	#Setup parameters
+	startButton = rospy.get_param('startButton', 9)
 	
 	#Init GPIO
 	GPIO.setmode(GPIO.BOARD)
