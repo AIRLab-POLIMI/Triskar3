@@ -17,7 +17,7 @@
 
 	<!-- triskar teleop node -->
 	<rosparam file="$(find triskar)/params/teleop.yaml" command="load" ns="triskar_teleop" if="$(arg teleop)"/>
-	<node pkg="teleop_twist_joy" type="teleop_node" name="triskar_teleop" if=$(arg teleop)/>
+	<node pkg="teleop_twist_joy" type="teleop_node" name="triskar_teleop" if="$(arg teleop)"/>
 	
 	<!-- triskar pixy teleop node -->
 	<rosparam file="$(find triskar)/params/pixy.yaml" command="load" ns="triskar_pixy" if="$(arg teleop)"/>
