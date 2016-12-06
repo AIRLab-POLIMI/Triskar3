@@ -25,7 +25,7 @@
 	
 	<!-- record node launch file -->
 	<include file="$(find record_ros)/launch/record_ros.launch" if="$(arg record)">
-		<arg name="path_save" value="~test" />
+		<arg name="path_save" value="~/test" />
 		<arg name="file_name" value="triskar" />
 	</include>
 </launch> 
