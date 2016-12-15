@@ -1,4 +1,2 @@
-#Udev rules needed by the triskar
-KERNEL=="ttyACM0",MODE="0666"
-KERNEL=="js0",MODE:="0666"
-
+#Udev rules needed by the triskar for the Hokuyo
+SUBSYSTEMS=="usb", KERNEL=="ttyACM[0-9]*", ACTION=="add", ATTRS{idVendor}=="15d1", ATTRS{idProduct}=="0000", MODE="666", PROGRAM="/home/airlab/ros/devel/lib/hokuyo_node/getID /dev/%k q", SYMLINK+="sensors/hokuyo_%c", GROUP="dialout"
