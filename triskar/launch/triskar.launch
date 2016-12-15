@@ -2,10 +2,12 @@
 	<arg name="teleop" default="1" />
 	<arg name="record" default="1" />
 	<arg name="laser" default="1" />
-	<arg name=="laserID" default=""/>
+	<arg name="laserID" default="H0707625"/>
 	
 	<!-- rosserial launch file for nova core -->
-	<include file="$(find rosserial_core)/launch/serial_node.launch" />
+	<include file="$(find rosserial_core)/launch/serial_node.launch">
+		<arg name="port" value="/dev/novaCore" />
+	</include>
 	
 	<!-- status node -->
 	<node pkg="triskar" type="status.py" name="status"/>
