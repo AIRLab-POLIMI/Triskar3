@@ -1,6 +1,8 @@
 <launch>
 	<arg name="teleop" default="1" />
 	<arg name="record" default="1" />
+	<arg name="laser" default="1" />
+	<arg name=="laserID" default=""/>
 	
 	<!-- rosserial launch file for nova core -->
 	<include file="$(find rosserial_core)/launch/serial_node.launch" />
@@ -28,4 +30,10 @@
 		<arg name="path_save" value="/home/airlab/test" />
 		<arg name="file_name" value="triskar" />
 	</include>
+	
+	<!-- laser node -->
+	<node pkg="hokuyo_node" type="hokuyo_node" name="hokuyo_node" if="$(arg laser)">
+		<param name="port" type="string" value="/dev/sensors/hokuyo_$(arg laserID)" />
+	</node>
+	
 </launch> 
