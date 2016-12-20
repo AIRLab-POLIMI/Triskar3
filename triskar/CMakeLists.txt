@@ -24,6 +24,10 @@ target_link_libraries(teleop_pixy_joy triskar ${catkin_LIBRARIES})
 target_link_libraries(pixy_demo triskar ${catkin_LIBRARIES})
 target_link_libraries(random_exploration ${catkin_LIBRARIES})
 
+add_dependencies(teleop_pixy_joy ${catkin_EXPORTED_TARGETS})
+add_dependencies(pixy_demo ${catkin_EXPORTED_TARGETS})
+add_dependencies(random_exploration ${catkin_EXPORTED_TARGETS})
+
 #############
 ## Install ##
 #############
