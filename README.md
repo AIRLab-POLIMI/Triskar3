@@ -2,7 +2,7 @@
 New triskar ros nodes and messages
 
 Installation and setup of AIRLab Triskar-family robots
-======================================================
+------------------------------------------------------
 
 This is a description of the installation procedure for Triskar-family robots (Triskarino, Triskarone, and so on) based on the Raspberry Pi and NovaCore modules to manage the three motors of the robots. 
 
@@ -16,7 +16,7 @@ At the end of this procedure, the robot will be configured as follows:
 
 
 Install Linux
-============================================================
+-------------
 Install Ubuntu Mate on the SD card by following the instructions at
 ```
 https://ubuntu-mate.org/raspberry-pi/
@@ -48,7 +48,7 @@ sudo adduser airlab dialout
 
 
 Install ROS
-============================================================
+-----------
 Install ROS by following the instructions at
 ```
 http://wiki.ros.org/kinetic/Installation/Ubuntu
@@ -80,7 +80,7 @@ as its last line.
 
 
 Install additional software from GitHub
-============================================================
+---------------------------------------
 Install and compile packages needed by the robot with the following commands:
 ```
 cd ~/ros/src
@@ -94,7 +94,7 @@ rospack profile
 
 
 Prepare the robot
-============================================================
+-----------------
 To ensure that the serial interface of the Nova Core boards always has the same peripheral name, follow the instructions in
 ```
 ~/ros/src/Triskar3/triskar/udev/README.md
@@ -102,7 +102,7 @@ To ensure that the serial interface of the Nova Core boards always has the same 
 
 
 Set up robot_upstart
-============================================================
+--------------------
 *robot_upstart* is a system that enables running a ROS system (defined by a launchfile) as a linux system service. Therefore, once set up the ROS system will be managed using the usual linux *service* command. In particular, it is possible to run, stop, restart and get the current status of the ROS system using linux commands
 ```
 sudo service <name_of_service> start
