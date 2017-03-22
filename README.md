@@ -4,7 +4,7 @@ New triskar ros nodes and messages
 Installation and setup of AIRLab Triskar-family robots
 ------------------------------------------------------
 
-This is a description of the installation procedure for Triskar-family robots (Triskarino, Triskarone, and so on) based on the Raspberry Pi and NovaCore modules to manage the three motors of the robots. 
+This is a description of the installation procedure for Triskar-family robots (Triskarino, Triskarone, and so on) based on the Raspberry Pi and Nova Core modules to manage the three motors of the robots. Except for small differences, this procedure also applies to robots using Nova Core modules not belonging to the Triskar family (e.g., robots using a PC as onboard computer instead of a Raspberry Pi; robots with two instead of three motors).
 
 At the end of this procedure, the robot will be configured as follows:
 
@@ -26,7 +26,8 @@ Take care of using an SD card with sufficient capacity for Ubuntu and ROS; at le
 When prompted by the Ubuntu Mate installer, define
 * a user called "airlab"
 * "aerolabio" as the user password
-* " <name_of_your_robot>" as the Raspberry Pi machine name
+* "<name_of_your_robot>" as the Raspberry Pi machine name
+
 This way, whenever you need to log in to the robot via SSH you will use command
 ```
 ssh airlab@<name_of_your_robot>
@@ -124,11 +125,11 @@ and then execute the command suggested onscreen.
 
 This procedure creates a new service called *triskar* which is automatically run as soon as the Raspberry Pi starts up.
 
-Because of their nature, services operate transparently and do not provide feedback to the user. For a ROS system this can be occasionally an annoying feature, especially during debugging. Therefore, robot_upstart provides an alternative way to run the system which corresponds to running the launchfile in a terminal window, and provides the same output. To do so, open a terminal window and run the following commands:
+Because of their nature, services operate transparently and do not provide feedback to the user. For a ROS system this can occasionally be an annoying feature, especially during debugging. Therefore, robot_upstart provides an alternative way to run the system which corresponds to running the launchfile in a terminal window, and provides the same output. To do so, open a terminal window and run the following commands:
 ```
 sudo service triskar stop
 sudo triskar-start
 ```
 The first command is necessary only if the *triskar* service is running, to avoid conflicts. The ROS system running in the terminal window can be stopped with the usual method, i.e. by pressing Ctrl-C within the window (or by closing the window).
 
-If necessary, robot_upstart also provides an uninstallation procedure using which the service corresponding to the ROS system can be removed.
+Note that robot_upstart provides an uninstallation procedure which (if necessary) can be used to remove the service corresponding to the ROS system.
