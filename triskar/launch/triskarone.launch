@@ -2,7 +2,6 @@
 	<arg name="teleop" default="1" />
 	<arg name="record" default="1" />
 	<arg name="laser" default="1" />
-	<arg name="laserID" default="H0707625"/>
 	
 	<!-- rosserial launch file for nova core -->
 	<include file="$(find rosserial_core)/launch/serial_node.launch">
@@ -24,15 +23,8 @@
 	<rosparam file="$(find triskar)/params/teleop_triskarone.yaml" command="load" ns="triskar_teleop" if="$(arg teleop)"/>
 	<node pkg="teleop_twist_joy" type="teleop_node" name="triskar_teleop" if="$(arg teleop)"/>
 	
-<!-- record node launch file -->
-<!--	<include file="$(find record_ros)/launch/record_ros.launch" if="$(arg record)">
-		<arg name="path_save" value="/home/airlab/test" />
-		<arg name="file_name" value="triskar" />
-	</include>
- -->	
-	<!-- laser node -->
-<!--	<node pkg="hokuyo_node" type="hokuyo_node" name="hokuyo_node" if="$(arg laser)">
-		<param name="port" type="string" value="/dev/sensors/hokuyo_$(arg laserID)" />
- 	</node>
--->	
+	<node pkg="odometry_publisher_tutorial" type="odometry_publisher" name="odometry_publisher"/>
+	
+	<include file="$(find triskar)/launch/hokuyo_nodes.launch"/>
+	
 </launch> 
