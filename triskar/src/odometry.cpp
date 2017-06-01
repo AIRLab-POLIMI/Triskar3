@@ -1,62 +1,46 @@
 #include <ros/ros.h>
-#include <geometry_msgs/TwistStamped.h>
+#include <tf/transform_broadcaster.h>
 #include <nav_msgs/Odometry.h>
 #include <math.h>
-
-#include <iostream>
-#include <string>
-#include <unistd.h>
-
-#include <sstream>
-#include <cstdio>
-
-
 #include <boost/array.hpp>
-
 #include <boost/numeric/odeint.hpp>
+
 using namespace boost::numeric::odeint;
+using namespace tf;
 
-
-ros::Publisher odomPub;
-
-/*
- *  Differential Equations:
- *
- *  dx/dt  = cos(th) * vx - sin(th) * vy  = f(t, x)
- *  dy/dt  = sin(th) * vx + cos(th) * vy  = f(t, y)
- *  dth/dt = w                            = f(t, th)
- *
- */
+tf::TransformBroadcaster* odomBroadcaster;
 
 typedef boost::array< double , 3 > vector;
-
 vector odomPos = {0,0,0}, inputVel;
 
 void publishOdom() {
 
-    nav_msgs::Odometry odom;
-    odom.child_frame_id = "base_link";
-
-    //set the position
-    odom.pose.pose.position.x = odomPos[0];
-    odom.pose.pose.position.y = odomPos[1];
-    odom.pose.pose.position.z = 0.0;
-
-    //set the orientation
-    odom.pose.pose.orientation.x = 0;
-    odom.pose.pose.orientation.y = 0;
-    odom.pose.pose.orientation.z = odomPos[2];
-    odom.pose.pose.orientation.w = 0;
-
-    //set the velocity
-    odom.twist.twist.linear.x = inputVel[0];
-    odom.twist.twist.linear.y = inputVel[1];
-    odom.twist.twist.angular.z = inputVel[2];
-
-    odomPub.publish(odom);
+    //create quaternion from theta
+    geometry_msgs::Quaternion odomQuat = tf::createQuaternionMsgFromYaw(odomPos[2]);
+    
+    geometry_msgs::TransformStamped odomTrans;
+    odomTrans.header.stamp = ros::Time::now();
+    odomTrans.header.frame_id = "odom";
+    odomTrans.child_frame_id = "base_link";
+    
+    odomTrans.transform.translation.x = odomPos[0];
+    odomTrans.transform.translation.y = odomPos[1];
+    odomTrans.transform.translation.z = 0.0;
+    odomTrans.transform.rotation = odomQuat;
+    
+    //send the transform over tf
+    odomBroadcaster->sendTransform(odomTrans);
 }
 
-//calcolo della variazione di posizione con il metodo di Eulero
+/*
+ *  Differential Equations:
+ *
+ *  dx/dt  = cos(th) * vx - sin(th) * vy
+ *  dy/dt  = sin(th) * vx + cos(th) * vy
+ *  dth/dt = w
+ *
+ */
+
 void f(vector &ds, double dt, const vector &s) {
     ds[0] = (cos(s[2]) * inputVel[0] - sin(s[2]) * inputVel[1]) * dt;
     ds[1] = (sin(s[2]) * inputVel[0] + cos(s[2]) * inputVel[1]) * dt;
@@ -72,7 +56,7 @@ void velCallback(const geometry_msgs::Twist::ConstPtr& msg) {
     vector ds;
     f(ds, dt, odomPos);
     for(int i=0;i<3;i++)
-        odomPos[i] += ds[i];    //sommo la variazione di posizione calcolata con Eulero alla vecchia posizione
+        odomPos[i] += ds[i];
 
     publishOdom();
 }
@@ -81,7 +65,7 @@ int main(int argc, char ** argv) {
     ros::init(argc, argv, "odometry");
     ros::NodeHandle n;
     ros::Subscriber velSub = n.subscribe("vel", 100, velCallback);
-    odomPub = n.advertise<nav_msgs::Odometry>("odom", 100);
-
+    odomBroadcaster = new tf::TransformBroadcaster();
+    
     ros::spin();
 }
