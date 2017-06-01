@@ -21,7 +21,7 @@ void publishOdom() {
     geometry_msgs::TransformStamped odomTrans;
     odomTrans.header.stamp = ros::Time::now();
     odomTrans.header.frame_id = "odom";
-    odomTrans.child_frame_id = "base_link";
+    odomTrans.child_frame_id = "base_link_runge_kutta";
 
     odomTrans.transform.translation.x = odomPos[0];
     odomTrans.transform.translation.y = odomPos[1];
@@ -83,7 +83,7 @@ void velCallback(const geometry_msgs::Twist::ConstPtr& msg) {
 }
 
 int main(int argc, char ** argv) {
-    ros::init(argc, argv, "odometry");
+    ros::init(argc, argv, "odometry_runge_kutta");
     ros::NodeHandle n;
     ros::Subscriber velSub = n.subscribe("vel", 100, velCallback);
     odomBroadcaster = new tf::TransformBroadcaster();
