@@ -3,7 +3,8 @@ project(triskar)
 
 find_package(catkin REQUIRED COMPONENTS roscpp
 					sensor_msgs
-					triskar_msgs)
+					triskar_msgs
+					tf)
 
 catkin_package()
 
