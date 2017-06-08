@@ -13,18 +13,20 @@ class OdometryNode {
 public:
 	OdometryNode(ros::NodeHandle& nh, double dt, string subscriber, string odometryType)
 		: nh(nh), 
-			rate(1/dt), 
+			rate(0),
 			velocity(vector<double>(3,0)), 
 			dt(dt) {
-	    velSub = nh.subscribe("vel", 1/dt, &OdometryNode::velocityCallback, this);
+	    velSub = nh.subscribe(subscriber, 100, &OdometryNode::velocityCallback, this);
+	    rate = ros::Rate(1/dt);
 	    odomBroadcaster = new tf::TransformBroadcaster();
+		
 	    //instance of odometry depending on what is read from the launchfile
 	    if(odometryType.compare("eulero") == 0) {
-	    	EuleroOdometry euleroOdometry;
-	    	odometry = &euleroOdometry;
+	    	EuleroOdometry* euleroOdometry = new EuleroOdometry();
+	    	odometry = euleroOdometry;
 		} else {
-			RungeKutta4Odometry rungeKutta4Odometry;
-			odometry = &rungeKutta4Odometry;
+			RungeKutta4Odometry* rungeKutta4Odometry = new RungeKutta4Odometry();
+			odometry = rungeKutta4Odometry;
 		}
 	}
 	
@@ -53,11 +55,10 @@ public:
 	    odomBroadcaster->sendTransform(odomTrans);
 	}
 	
+	
 	void spin() {
-		ros::spinOnce();
-        
         publishOdometry();
-        
+		ros::spinOnce();
      	rate.sleep();
 	}
 	
@@ -74,11 +75,11 @@ private:
 int main(int argc, char ** argv) {
     ros::init(argc, argv, "odometry");
 
-	ros::NodeHandle nh("~");
+	ros::NodeHandle nh;
 	double dt;
 	string subscriber, odometryType;
 	
-	nh.param("period", dt, 0.01);								//default period: 0.01
+	nh.param("period", dt, 0.01);										//default period: 0.01
 	nh.param("subscriber", subscriber, string("vel"));					//default subscriber: vel
 	nh.param("odometryType", odometryType, string("eulero"));			//default integration: eulero
 	
