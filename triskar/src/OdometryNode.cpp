@@ -11,11 +11,13 @@ using namespace std;
 
 class OdometryNode {
 public:
-	OdometryNode(ros::NodeHandle& nh, double dt, string subscriber, string odometryType)
+	OdometryNode(ros::NodeHandle& nh, double dt, string subscriber, string odometryType, string childFrameID, string headerFrameID)
 		: nh(nh), 
 			rate(0),
 			velocity(vector<double>(3,0)), 
-			dt(dt) {
+			dt(dt),
+			childFrameID(childFrameID),
+			headerFrameID(headerFrameID) {
 	    velSub = nh.subscribe(subscriber, 100, &OdometryNode::velocityCallback, this);
 	    rate = ros::Rate(1/dt);
 	    odomBroadcaster = new tf::TransformBroadcaster();
@@ -43,8 +45,8 @@ public:
 
 	    geometry_msgs::TransformStamped odomTrans;
 	    odomTrans.header.stamp = ros::Time::now();
-	    odomTrans.header.frame_id = "odom";
-	    odomTrans.child_frame_id = "base_link";
+	    odomTrans.header.frame_id = headerFrameID;
+	    odomTrans.child_frame_id = childFrameID;
 	
 	    odomTrans.transform.translation.x = odometry->getPosition().at(0);
 	    odomTrans.transform.translation.y = odometry->getPosition().at(1);
@@ -70,6 +72,7 @@ private:
     Odometry* odometry;
     double dt;
     ros::Rate rate;
+    string childFrameID, headerFrameID;
 };
 
 int main(int argc, char ** argv) {
@@ -77,17 +80,19 @@ int main(int argc, char ** argv) {
 
 	ros::NodeHandle nh;
 	double dt;
-	string subscriber, odometryType;
+	string subscriber, odometryType, childFrameID, headerFrameId;
 	
-	nh.param("period", dt, 0.01);										//default period: 0.01
-	nh.param("subscriber", subscriber, string("vel"));					//default subscriber: vel
-	nh.param("odometryType", odometryType, string("eulero"));			//default integration: eulero
+	nh.param("period", dt, 0.01);											//default period: 0.01
+	nh.param("subscriber", subscriber, string("vel"));						//default subscriber: vel
+	nh.param("odometry_type", odometryType, string("eulero"));				//default integration: eulero
+	nh.param("header_frame_id", headerFrameId, string("odom"));				//default header: odom
+	nh.param("child_frame_id", childFrameID, string("base_link"));			//default child: base_link
 	
 	if(dt <= 0) {
 		dt = 0.01;
 	}
 	
-	OdometryNode odometryNode(nh, dt, subscriber, odometryType);
+	OdometryNode odometryNode(nh, dt, subscriber, odometryType, childFrameID, headerFrameId);
 	while(ros::ok()) {
         odometryNode.spin();
     }
