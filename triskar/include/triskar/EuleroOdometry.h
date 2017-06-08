@@ -12,7 +12,6 @@ class EuleroOdometry : public Odometry{
 public:
 	using Odometry::Odometry;
 	void integrate(const vector<double>& velocity, double dt) override;
-	void calculateVariation(vector<double> *variation, const vector<double>& position, const vector<double>& velocity);
 	vector<double> getPosition();
 };
 
