@@ -16,6 +16,9 @@ include_directories(include ${catkin_INCLUDE_DIRS})
 ###########
 
 add_library(triskar src/PixyPublisher)
+add_library(odometry_lib src/Odometry)
+add_library(eulero_odometry src/EuleroOdometry)
+add_library(rungekutta4_odometry src/RungeKutta4Odometry)
 
 add_executable(teleop_pixy_joy src/PixyTeleop.cpp)
 add_executable(pixy_demo src/PixyDemo.cpp)
@@ -24,6 +27,11 @@ add_executable(odometry src/OdometryNode.cpp)
 
 target_link_libraries(teleop_pixy_joy triskar ${catkin_LIBRARIES})
 target_link_libraries(pixy_demo triskar ${catkin_LIBRARIES})
+
+target_link_libraries(odometry odometry_lib ${catkin_LIBRARIES})
+target_link_libraries(odometry eulero_odometry ${catkin_LIBRARIES})
+target_link_libraries(odometry rungekutta4_odometry ${catkin_LIBRARIES})
+
 target_link_libraries(random_exploration ${catkin_LIBRARIES})
 target_link_libraries(odometry ${catkin_LIBRARIES})
 
@@ -31,6 +39,8 @@ add_dependencies(teleop_pixy_joy ${catkin_EXPORTED_TARGETS})
 add_dependencies(pixy_demo ${catkin_EXPORTED_TARGETS})
 add_dependencies(random_exploration ${catkin_EXPORTED_TARGETS})
 add_dependencies(odometry ${catkin_EXPORTED_TARGETS})
+
+
 
 #############
 ## Install ##
