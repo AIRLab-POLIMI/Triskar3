@@ -35,3 +35,6 @@ RemoteSystemsTempFiles/
 .cproject
 .project
 
+# For Mac
+._*
+.DS_Store
