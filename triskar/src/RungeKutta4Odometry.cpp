@@ -12,22 +12,22 @@ void RungeKutta4Odometry::integrate(const vector<double>& velocity, double dt) {
 	calculateVariation(&k1, *position, velocity);
     //calcolo k2
     for(int i=0; i<3; i++)
-        sk2.at(i) = position->at(i) + 1/2 * k1.at(i) * dt;
+        sk2[i] = (*position)[i] + 1/2 * k1[i] * dt;
     
     calculateVariation(&k2, sk2, velocity);
     
     //calcolo k3
     for(int i=0; i<3; i++)
-        sk3.at(i) = position->at(i) + 1/2 * k3.at(i) * dt;
+        sk3[i] = (*position)[i] + 1/2 * k3[i] * dt;
     
     calculateVariation(&k3, sk3, velocity);
     
     //calcolo k4
     for(int i=0; i<3; i++)
-    	sk4.at(i) = position->at(i) + 1/2 * k4.at(i) * dt;
+    	sk4[i] = (*position)[i] + 1/2 * k4[i] * dt;
         
     calculateVariation(&k4, sk4, velocity);
     
     for(int i=0; i<3; i++)
-    	position->at(i) += dt/6 * (k1.at(i) + 2*k2.at(i) + 2*k3.at(i) + k4.at(i));
+    	(*position)[i] += dt/6 * (k1[i] + 2*k2[i] + 2*k3[i] + k4[i]);
 }

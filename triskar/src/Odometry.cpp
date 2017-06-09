@@ -17,9 +17,9 @@ Odometry:: ~Odometry() {
 
 //calculates the infinitesimal variation of the function, given the actual position and the velocity
 void Odometry::calculateVariation(vector<double> *variation, const vector<double>& position, const vector<double>& velocity) {
-    variation->at(0) = (cos(position.at(2)) * velocity.at(0) - sin(position.at(2)) * velocity.at(1));
-    variation->at(1) = (sin(position.at(2)) * velocity.at(0) + cos(position.at(2)) * velocity.at(1));
-    variation->at(2) = velocity.at(2);
+    (*variation)[0] = (cos(position[2]) * velocity[0] - sin(position[2]) * velocity[1]);
+    (*variation)[1] = (sin(position[2]) * velocity[0] + cos(position[2]) * velocity[1]);
+    (*variation)[2] = velocity[2];
 };
 vector<double> Odometry::getPosition() {
 	return *position;
