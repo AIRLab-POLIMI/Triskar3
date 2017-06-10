@@ -85,7 +85,7 @@ int main(int argc, char ** argv) {
 	string subscriber, odometryType, childFrameID, headerFrameId;
 	
 	nh.param("period", dt, 0.01);											//default period: 0.01
-	nh.param("subscriber", subscriber, string("vel"));						//default subscriber: vel
+	nh.param("subscriber", subscriber, string("/vel"));						//default subscriber: vel
 	nh.param("odometry_type", odometryType, string("eulero"));				//default integration: eulero
 	nh.param("header_frame_id", headerFrameId, string("odom"));				//default header: odom
 	nh.param("child_frame_id", childFrameID, string("base_link"));			//default child: base_link
