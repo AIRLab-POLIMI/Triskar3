@@ -14,8 +14,11 @@ public:
 		: nh(nh), 
 			rate(0) {
 		pathPublishers = vector<PathPublisher*>();
-		PathPublisher* pub = new PathPublisher(nh, string("/world"), string("/base_link"), string("world"), string("/trajectory"));
-		pathPublishers.push_back(pub);
+		PathPublisher* pubOdomPath = new PathPublisher(nh, string("/world"), string("/base_link"), string("world"), string("/trajectory_odom"));
+		pathPublishers.push_back(pubOdomPath);
+                
+        PathPublisher* pubOptiPath = new PathPublisher(nh, string("/world"), string("/Robot_2/base_link"), string("world"), string("/trajectory_opti"));
+        pathPublishers.push_back(pubOptiPath);
 	    
 	    rate = ros::Rate(1/dt);
 	}
@@ -38,16 +41,14 @@ private:
 int main(int argc, char ** argv) {
     ros::init(argc, argv, "path");
 
-	ros::NodeHandle nh;
+	ros::NodeHandle nh("~");
 	double dt;
-	
 	nh.param("period", dt, 0.01);
-	
 	if(dt <= 0) {
 		dt = 0.01;
 	}
-	
-	PathNode pathNode(nh, dt);
+
+    PathNode pathNode(nh, dt);
 	while(ros::ok()) {
         pathNode.spin();
     }
