@@ -1,0 +1,7 @@
+<launch>
+        <!-- path node -->
+	<rosparam command="load" file="/home/alemazzo/catkin_ws/src/Triskar3/triskar/launch/path_publishers.yaml" />
+	<node respawn="true" pkg="triskar" type="path" name="path" output="screen">
+		<param name="period" value="0.01" />
+	</node>
+</launch> 

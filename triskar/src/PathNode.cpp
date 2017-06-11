@@ -47,6 +47,17 @@ int main(int argc, char ** argv) {
 	if(dt <= 0) {
 		dt = 0.01;
 	}
+	
+	/*XmlRpc::XmlRpcValue pathPublishers;
+    nh.getParam("pathPublishers", pathPublishers);
+	ROS_ASSERT(pathPublishers.getType() == XmlRpc::XmlRpcValue::TypeArray);
+   
+	for (int32_t i = 0; i < pathPublishers.size(); ++i) {
+		ROS_ASSERT(pathPublishers[i].getType() == XmlRpc::XmlRpcValue::TypeStruct);
+        if(pathPublishers[i].hasMember("tfPosTargetFrame")) {
+            ROS_INFO("tfPosTargetFrame");
+        }
+	}*/
 
     PathNode pathNode(nh, dt);
 	while(ros::ok()) {

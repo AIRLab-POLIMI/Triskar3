@@ -1,0 +1,1 @@
+pathPublishers: [ { tfPosTargetFrame: '/world', tfPosSourceFrame: '/base_link', pathHeaderFrameId: 'world', pathTopic: '/trajectory_odom' }, { tfPosTargetFrame: '/world', tfPosSourceFrame: '/Robot_2/base_link', pathHeaderFrameId: 'world', pathTopic: '/trajectory_opti' } ]
