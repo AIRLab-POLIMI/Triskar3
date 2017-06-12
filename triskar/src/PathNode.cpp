@@ -10,16 +10,16 @@ using namespace std;
 
 class PathNode {
 public:
-	PathNode(ros::NodeHandle& nh, double dt)
-		: nh(nh), 
-			rate(0) {
-		pathPublishers = vector<PathPublisher*>();
-		PathPublisher* pubOdomPath = new PathPublisher(nh, string("/world"), string("/base_link"), string("world"), string("/trajectory_odom"));
-		pathPublishers.push_back(pubOdomPath);
-                
-        PathPublisher* pubOptiPath = new PathPublisher(nh, string("/world"), string("/Robot_2/base_link"), string("world"), string("/trajectory_opti"));
-        pathPublishers.push_back(pubOptiPath);
+	PathNode(ros::NodeHandle& nh, double dt, vector<string> tfPosTargetFrames, vector<string> tfPosSourceFrames, vector<string> pathHeaderFrameIds, vector<string> pathTopics)
+    : nh(nh), rate(0) {
+        
+        //allocate pathPublishers
+        pathPublishers = vector<PathPublisher*>();
+        for(int i=0; i<tfPosTargetFrames.size(); i++) {
+            pathPublishers.push_back(new PathPublisher(nh, tfPosTargetFrames[i], tfPosSourceFrames[i], pathHeaderFrameIds[i], pathTopics[i]));
+        }
 	    
+        //allocate rate with freq 1/dt
 	    rate = ros::Rate(1/dt);
 	}
 	
@@ -47,9 +47,25 @@ int main(int argc, char ** argv) {
 	if(dt <= 0) {
 		dt = 0.01;
 	}
-
-    PathNode pathNode(nh, dt);
-	while(ros::ok()) {
-        pathNode.spin();
+    
+    vector<string> tfPosTargetFrames;
+    nh.getParam("tfPosTargetFrames", tfPosTargetFrames);
+    vector<string> tfPosSourceFrames;
+    nh.getParam("tfPosSourceFrames", tfPosSourceFrames);
+    vector<string> pathHeaderFrameIds;
+    nh.getParam("pathHeaderFrameIds", pathHeaderFrameIds);
+    vector<string> pathTopics;
+    nh.getParam("pathTopics", pathTopics);
+    
+    if(tfPosTargetFrames.size() == tfPosSourceFrames.size() &&
+       tfPosTargetFrames.size() == pathHeaderFrameIds.size() &&
+       tfPosTargetFrames.size() == pathTopics.size()) {
+        
+        PathNode pathNode(nh, dt, tfPosTargetFrames, tfPosSourceFrames, pathHeaderFrameIds, pathTopics);
+        while(ros::ok()) {
+            pathNode.spin();
+        }
+    } else {
+        ROS_INFO("Invalid params passed");
     }
 }
