@@ -61,18 +61,18 @@ public:
 			obstacleFront = false;
 
 		//look at the left sonars
-		if(prox_msg->range[1] < threshold || prox_msg->range[6] < threshold)
+		if(prox_msg->range[2] < threshold || prox_msg->range[5] < threshold)
 			obstacleLeft = true;
 		else
 			obstacleLeft = false;
 
 		//look at the right sonars
-		if(prox_msg->range[2] < threshold || prox_msg->range[5] < threshold)
+		if(prox_msg->range[1] < threshold || prox_msg->range[6] < threshold)
 			obstacleRight = true;
 		else
 			obstacleRight = false;
 
-		//look at the right sonars
+		//look at the back sonars
 		if(prox_msg->range[3] < threshold || prox_msg->range[7] < threshold)
 			obstacleBack = true;
 		else
