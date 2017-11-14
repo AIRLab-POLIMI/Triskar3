@@ -116,7 +116,14 @@ public:
 
 	void obstacleState(geometry_msgs::Twist& cmd_msg)
 	{
-		cmd_msg.angular.z = 4.0;
+		cmd_msg.linear.x = 0.0;
+
+		if(!obstacleLeft)
+			cmd_msg.angular.z = 4.0;
+		else if(!obstacleRight)
+			cmd_msg.angular.z = -4.0;
+		else
+			cmd_msg.angular.z = 0;
 	}
 
 	void turnState(geometry_msgs::Twist& cmd_msg)
@@ -124,9 +131,9 @@ public:
 		cmd_msg.linear.x = 0.5;
 
 		if(!obstacleLeft)
-			cmd_msg.angular.z = -4.0;
-		else if(!obstacleRight)
 			cmd_msg.angular.z = 4.0;
+		else if(!obstacleRight)
+			cmd_msg.angular.z = -4.0;
 		else
 			cmd_msg.angular.z = 0;
 	}
